@@ -15,6 +15,9 @@ from PIL import Image
 from skimage import filters, measure
 from skimage.filters import threshold_local
 
+
+# Example change
+
 # Filename to look for
 filename_contains = ".tif"
 
