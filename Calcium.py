@@ -22,12 +22,12 @@ from skimage.filters import threshold_local
 filename_contains = ".tif"
 
 # Where to save the results
-root_path = "/Users/Mathew/Documents/Current analysis/ToMathew/"
+root_path = "/Volumes/T7/Current_Analysis/JL_CaExperiments/Ca3/"
 
 pathlist = []
 
-pathlist.append("/Users/Mathew/Documents/Current analysis/ToMathew/Control/")
-pathlist.append("/Users/Mathew/Documents/Current analysis/ToMathew/Calcified/")
+pathlist.append("/Volumes/T7/Current_Analysis/JL_CaExperiments/Ca3/1/")
+
 
 # Threshold to use:
 
@@ -134,6 +134,7 @@ for path in pathlist:
     for root, dirs, files in os.walk(path):
         for name in files:
             if filename_contains in name and 'out.tif' not in name:
+              if '._' not in name:
                 image_path = os.path.join(path, name)
                 print(image_path)
                 new_path = os.path.join(path, str(j))
@@ -175,6 +176,7 @@ for path in pathlist:
                 stats = get_statistics(measurements, number)
                 stats['image_name'] = name
                 stats['image_path'] = image_path
+                stats['number_of_pixels_with_calcium']=binary.sum()
                 all_statistics = pd.concat([all_statistics, pd.DataFrame([stats])], ignore_index=True)
                 
                 intensity = measurements['mean_intensity']
@@ -185,6 +187,7 @@ for path in pathlist:
                 
                 length = measurements['major_axis_length']
                 save_plot(length, new_path, "Lengths.pdf", bins=20, rng=[0, 100], xlabel='Length', ylabel='Number of Features', title='Cluster lengths')
+                
 
 # Save the collected statistics to a CSV file
 output_csv_path = os.path.join(root_path, 'all_image_statistics.csv')
