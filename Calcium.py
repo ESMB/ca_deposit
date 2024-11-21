@@ -163,6 +163,9 @@ for path in pathlist:
                 binary = threshold_image_standard(calcium_flat, thresh)
                 save_image(binary, new_path, 'calcium_binary_out.tif')
                 
+                # Get total intensity of all pixels
+                thresholded=binary*calcium_flat
+                
                 # Label the image
                 number, labelled = label_image(binary)
                 save_image(labelled, new_path, 'calcium_labelled_out.tif')
@@ -177,6 +180,7 @@ for path in pathlist:
                 stats['image_name'] = name
                 stats['image_path'] = image_path
                 stats['number_of_pixels_with_calcium']=binary.sum()
+                stats['total_intensity_of_calcium_pixels']=thresholded.sum()
                 all_statistics = pd.concat([all_statistics, pd.DataFrame([stats])], ignore_index=True)
                 
                 intensity = measurements['mean_intensity']
